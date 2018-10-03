@@ -1,0 +1,110 @@
+
+
+@model EmployeeTest.Models.CustomEmployee
+
+<h2>New Employee Registration</h2>
+
+<form method="post" enctype="multipart/form-data">
+
+    <div>
+        <div style="display:inline-block">
+            @Html.LabelFor(x => x.FirstName)
+        </div>
+        <div style="display:inline-block">
+            @Html.EditorFor(x => x.FirstName)
+        </div>
+    </div>
+
+    <div>
+        <div style="display:inline-block">
+            @Html.LabelFor(x => x.LastName)
+        </div>
+        <div style="display:inline-block">
+            @Html.EditorFor(x => x.LastName)
+        </div>
+    </div>
+
+    <div>
+        <div style="display:inline-block">
+            @Html.LabelFor(x => x.BirthDate)
+        </div>
+        <div style="display:inline-block">
+            @Html.EditorFor(x => x.BirthDate)
+        </div>
+    </div>
+
+    <div>
+        <div style="display:inline-block">
+            @Html.LabelFor(x => x.Gender)
+        </div>
+        <div style="display:inline-block">
+            Male @Html.RadioButtonFor(x => x.Gender, "Male")
+            Female @Html.RadioButtonFor(x => x.Gender, "Female")
+        </div>
+    </div>
+
+    <div>
+        <div style="display:inline-block">
+            @Html.LabelFor(x => x.Salary)
+        </div>
+        <div style="display:inline-block">
+            @Html.EditorFor(x => x.Salary)
+        </div>
+    </div>
+
+    <div>
+        <div style="display:inline-block">
+            @Html.LabelFor(x => x.State)
+        </div>
+        <div style="display:inline-block">
+            @Html.DropDownListFor(x => x.FkStateId, (IEnumerable<SelectListItem>)ViewBag.StateList, "-Select State-")
+        </div>
+    </div>
+
+    <div>
+        <div style="display:inline-block">
+            @Html.LabelFor(x => x.City)
+        </div>
+        <div style="display:inline-block">
+            @Html.DropDownListFor(x => x.FkCityId, (IEnumerable<SelectListItem>)ViewBag.CityList, "-Select City-")
+        </div>
+    </div>
+
+    <div>
+        <div style="display:inline-block">
+            @Html.LabelFor(x => x.Department)
+        </div>
+        <div style="display:inline-block">
+            @Html.DropDownListFor(x => x.FkDepartmentId, (IEnumerable<SelectListItem>)ViewBag.DepartmentList, "-Select Department-")
+        </div>
+    </div>
+
+    <div>
+        <div style="display:inline-block">
+            @Html.LabelFor(x => x.IsActive)
+        </div>
+        <div style="display:inline-block">
+            Yes @Html.RadioButtonFor(x => x.IsActive, "True")
+            No @Html.RadioButtonFor(x => x.IsActive, "False")
+        </div>
+    </div>
+
+    <div>
+        <div style="display:inline-block">
+            @Html.LabelFor(x => x.Photo)
+        </div>
+        <div style="display:inline-block">
+            @Html.TextBoxFor(x => x.user_image, new { Type = "File"})
+        </div>
+    </div>
+
+    <div>
+        <div>
+
+        </div>
+        <div>
+            <button type="submit">Submit</button>
+        </div>
+    </div>
+
+</form>
