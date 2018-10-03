@@ -1,0 +1,155 @@
+using EmployeeTest.Models;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.IO;
+
+namespace EmployeeTest.Controllers
+{
+    public class EmployeeController : Controller
+    {
+        CommonServices cms = new CommonServices();
+
+        public ActionResult Employee()
+        {
+            //List<Employee> employeeList = cms.employeeList();
+
+            //using (EmployeeTestEntities db = new EmployeeTestEntities())
+            //{
+            //    //var item = db.Employees.Include(x => x.City).Include(x => x.State).Include(x => x.Department);
+            //    //return View(item.ToList());
+
+            //    //employeeList = db.Employees.Include(x => x.City).Include(x => x.State).Include(x => x.Department).ToList();
+            //}
+
+            //CustomEmployee customEmployee = new CustomEmployee();
+
+            EmployeeTestEntities db = new EmployeeTestEntities();
+            List<CustomEmployee> customEmployeesList = db.Employees.Select(x => new CustomEmployee
+            {
+                EmployeeId = x.EmployeeId,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                BirthDate = x.BirthDate,
+                Gender = x.Gender,
+                Salary = x.Salary,
+                CityName = x.City.CityName,
+                StateName = x.State.StateName,
+                DepartmentName = x.Department.DepartmentName,
+                Photo = x.Photo,
+                IsActive = x.IsActive
+            }).ToList();
+
+            return View(customEmployeesList);
+        }
+
+        public ActionResult NewEmployee()
+        {
+            List<SelectListItem> cityList = new List<SelectListItem>();
+            List<City> _cityList = cms.cityList();
+            cityList = _cityList.Select(x => new SelectListItem()
+            {
+                Text = x.CityName,
+                Value = x.CityId.ToString()
+            }).ToList();
+
+            List<SelectListItem> stateList = new List<SelectListItem>();
+            List<State> _stateList = cms.stateList();
+            stateList = _stateList.Select(x => new SelectListItem()
+            {
+                Value = x.StateId.ToString(),
+                Text = x.StateName
+            }).ToList();
+
+            List<SelectListItem> departmentList = new List<SelectListItem>();
+            List<Department> _departmentList = cms.departmentList();
+            departmentList = _departmentList.Select(x => new SelectListItem()
+            {
+                Value = x.DepartmentId.ToString(),
+                Text = x.DepartmentName
+            }).ToList();
+
+            ViewBag.CityList = cityList;
+            ViewBag.StateList = stateList;
+            ViewBag.DepartmentList = departmentList;
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult NewEmployee(CustomEmployee model)
+        {
+            model.user_image.SaveAs(Server.MapPath("~/Images/") + model.user_image.FileName);
+
+            cms.SaveEmployee(model);
+
+            return RedirectToAction("NewEmployee");
+        }
+        
+        public ActionResult EditEmployee(int EmployeeId)
+        {
+            CustomEmployee emp = new CustomEmployee();
+            var _emp = cms.EmployeeById(EmployeeId);
+            emp.FirstName = _emp.FirstName;
+            emp.LastName = _emp.LastName;
+            emp.BirthDate = _emp.BirthDate.Value;
+            emp.Gender = _emp.Gender;
+            emp.Salary = _emp.Salary;
+            emp.FkCityId = _emp.FkCityId;
+            emp.FkStateId = _emp.FkStateId;
+            emp.Photo = _emp.Photo;
+            emp.FkDepartmentId = _emp.FkDepartmentId;
+            emp.IsActive = _emp.IsActive;
+
+            List<SelectListItem> cityList = new List<SelectListItem>();
+            List<City> _cityList = cms.cityList();
+            cityList = _cityList.Select(x => new SelectListItem()
+            {
+                Text = x.CityName,
+                Value = x.CityId.ToString()
+            }).ToList();
+
+            List<SelectListItem> stateList = new List<SelectListItem>();
+            List<State> _stateList = cms.stateList();
+            stateList = _stateList.Select(x => new SelectListItem()
+            {
+                Value = x.StateId.ToString(),
+                Text = x.StateName
+            }).ToList();
+
+            List<SelectListItem> departmentList = new List<SelectListItem>();
+            List<Department> _departmentList = cms.departmentList();
+            departmentList = _departmentList.Select(x => new SelectListItem()
+            {
+                Value = x.DepartmentId.ToString(),
+                Text = x.DepartmentName
+            }).ToList();
+
+            ViewBag.CityList = cityList;
+            ViewBag.StateList = stateList;
+            ViewBag.DepartmentList = departmentList;
+
+            return View(emp);
+        }
+
+        [HttpPost]
+        public ActionResult EditEmployee(CustomEmployee model)
+        {
+            model.user_image.SaveAs(Server.MapPath("~/Images/") + model.user_image.FileName);
+
+            cms.EditEmployee(model);
+
+            return RedirectToAction("Employee");
+        }
+
+        public ActionResult DeleteEmployee(int employeeId)
+        {
+            cms.DeleteEmployee(employeeId);
+
+            return RedirectToAction("Employee");
+        }
+    }
+}
