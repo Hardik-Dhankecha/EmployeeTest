@@ -1,0 +1,50 @@
+
+@model IEnumerable<EmployeeTest.Models.CustomEmployee>
+
+<div>
+    <a href="@Url.Action("NewEmployee","Employee")">Add New Employee</a>
+</div>
+
+<table border="1" class="table">
+
+    <thead>
+        <tr>
+            <th>FullName</th>
+            <th>BirthDate</th>
+            <th>Gender</th>
+            <th>Salary</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Department</th>
+            <th>IsActive</th>
+            <th>Photo</th>
+            <th colspan="3">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model)
+        {
+        <tr>
+            <td>@item.FirstName @item.LastName</td>
+            <td>@item.BirthDate</td>
+            <td>@item.Gender</td>
+            <td>@item.Salary</td>
+            <td>@item.CityName</td>
+            <td>@item.StateName</td>
+            <td>@item.DepartmentName</td>
+            <td>@item.IsActive</td>
+            <td>
+                <img src="@Url.Content(item.Photo)" style="width:100px; height:100px" />
+            </td>
+            <td>
+                <a href="@Url.Action("EditEmployee","Employee",new { EmployeeId = item.EmployeeId })"><b>Edit</b></a>
+            </td>
+            <td>
+                <a href="@Url.Action("DeleteEmployee","Employee",new { EmployeeId = item.EmployeeId })"><b>Delete</b></a>
+            </td>
+            <td>Card</td>
+        </tr>
+        }
+    </tbody>
+
+</table>
